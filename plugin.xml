@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com-greatday-plugins" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>GreatDayPlugin</name>
+    <js-module name="GreatDayPlugin" src="www/GreatDayPlugin.js">
+        <clobbers target="cordova.plugins.GreatDayPlugin" />
+    </js-module>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="GreatDayPlugin">
+                <param name="android-package" value="com.greatday.plugins.GreatDayPlugin" />
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <activity android:label="Location" android:name="com.greatday.plugins.activity.geolocation.GeolocationActivity"></activity>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml"></config-file>
+
+        <!-- Instalasi Index -->
+        <source-file src="src/android/java/GreatDayPlugin.java" target-dir="src/com/greatday/plugins" />
+
+        <!-- Instalasi Activity -->
+        <source-file src="src/android/java/geolocation/GeolocationActivity.java" target-dir="src/com/greatday/plugins/activity/geolocation" />
+
+        <!-- Instalasi Layout -->
+        <source-file src="src/android/layout/activity_geolocation.xml" target-dir="res/layout"/>
+
+        <!-- Instalasi Assets -->
+        <source-file src="src/android/assets/bouncy-mapmaker.json" target-dir="assets"/>
+
+        <!-- Instalasi Gradle -->
+        <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference"/>
+    </platform>
+</plugin>
