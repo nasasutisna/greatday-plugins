@@ -1,50 +1,55 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="com-greatday-plugins" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com-greatday-plugins"
+    version="0.0.1"
+    xmlns="http://apache.org/cordova/ns/plugins/1.0">
+
     <name>GreatDayPlugin</name>
-    <js-module name="GreatDayPlugin" src="www/GreatDayPlugin.js">
+    <js-module
+        name="GreatDayPlugin"
+        src="www/GreatDayPlugin.js">
         <clobbers target="greatdayplugin" />
     </js-module>
     <platform name="android">
-        <config-file parent="/*" target="res/xml/config.xml">
+        <config-file
+            parent="/*"
+            target="res/xml/config.xml">
             <feature name="GreatDayPlugin">
-                <param name="android-package" value="com.greatday.plugins.GreatDayPlugin" />
+                <param
+                    name="android-package"
+                    value="com.greatday.plugins.GreatDayPlugin" />
             </feature>
         </config-file>
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <activity android:label="Location" android:name="com.greatday.plugins.activity.geolocation.GeolocationActivity"></activity>
+        <config-file
+            parent="/manifest/application"
+            target="AndroidManifest.xml">
+            <activity
+                android:name="com.greatday.plugins.activity.camera.CameraGreatdayActivity"
+                android:label="Camera"
+                android:theme="@style/Theme.AppCompat" />
         </config-file>
-        <config-file target="AndroidManifest.xml" parent="/*">
+        <!-- <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
             <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
             <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
             <uses-permission android:name="android.permission.CAMERA" />
             <uses-feature android:name="android.hardware.location.gps" />
-        </config-file>
+        </config-file> -->
 
         <!-- Instalasi Index -->
-        <source-file src="src/android/java/GreatDayPlugin.java" target-dir="src/com/greatday/plugins" />
+        <source-file
+            src="src/android/java/GreatDayPlugin.java"
+            target-dir="src/com/greatday/plugins" />
 
         <!-- Instalasi Activity -->
-        <source-file src="src/android/java/geolocation/GeolocationActivity.java" target-dir="src/com/greatday/plugins/activity/geolocation" />
-        <source-file src="src/android/java/geolocation/GeoLocator.java" target-dir="src/com/greatday/plugins/activity/geolocation" />
-
-        <!-- Instalasi Extention -->
-        <source-file src="src/android/java/extention/AndroidPermissions.java" target-dir="src/com/greatday/plugins/extention" />
-
-        <!-- Instalasi Layout -->
-        <source-file src="src/android/layout/activity_geolocation.xml" target-dir="res/layout"/>
-
-        <!-- Instalasi Assets -->
-        <source-file src="src/android/assets/bouncy-mapmaker.json" target-dir="assets"/>
-
-        <!-- Instalasi Drawable -->
-        <source-file src="src/android/drawable/button_full.xml" target-dir="res/drawable"/>
-        <source-file src="src/android/drawable/button_outline.xml" target-dir="res/drawable"/>
-
-        <!-- Instalasi Style -->
-        <source-file src="src/android/values/style.xml" target-dir="res/values"/>
+        <source-file
+            src="src/android/java/camera/CameraGreatdayActivity.java"
+            target-dir="src/com/greatday/plugins/activity/camera" />
 
         <!-- Instalasi Gradle -->
-        <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference"/>
+        <framework
+            custom="true"
+            src="src/android/build-extras.gradle"
+            type="gradleReference" />
     </platform>
 </plugin>

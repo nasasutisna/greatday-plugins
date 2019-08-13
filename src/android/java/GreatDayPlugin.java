@@ -5,12 +5,11 @@ import org.apache.cordova.CallbackContext;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
 
-import com.greatday.plugins.activity.geolocation.GeolocationActivity;
+import com.greatday.plugins.activity.camera.CameraGreatdayActivity;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -28,8 +27,8 @@ public class GreatDayPlugin extends CordovaPlugin {
     }
 
     private void getLocation(Context context) {
-      Intent intent = new Intent(context, GeolocationActivity.class);
-      this.cordova.getActivity().startActivity(intent);
+       Intent intent = new Intent(context, CameraGreatdayActivity.class);
+       this.cordova.getActivity().startActivity(intent);
     }
 
 }
