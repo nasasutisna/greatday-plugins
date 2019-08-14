@@ -4,4 +4,5 @@ repositories{
 
 dependencies {
     implementation 'com.github.senjuid:AndroidCamera:9.0'
+    implementation 'com.github.senjuid:AndroidLocation:6.0'
 }
