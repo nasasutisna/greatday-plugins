@@ -1,17 +1,25 @@
 package com.greatday.plugins.activity.camera;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.senjuid.camera.CameraActivity;
 
 public class CameraGreatdayActivity extends CameraActivity {
 
-    public CameraGreatdayActivity() {
-        Intent intent = getIntent();
-        if(intent != null) {
-            photo = intent.getStringExtra("name");
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            photo = extras.getString("name");
         }
+    }
+
+    public CameraGreatdayActivity() {
+        
     }
 
     @Override
