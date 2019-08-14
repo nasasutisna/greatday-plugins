@@ -16,6 +16,9 @@ public class CameraGreatdayActivity extends CameraActivity {
 
     @Override
     public void onYesButtonPressed(String photo) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("photo", photo);
+        setResult(RESULT_OK, returnIntent);
         Toast.makeText(this, photo, Toast.LENGTH_LONG).show();
         finish();
     }
