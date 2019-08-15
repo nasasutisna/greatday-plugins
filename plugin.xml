@@ -27,6 +27,10 @@
                 android:name="com.greatday.plugins.activity.camera.CameraGreatdayActivity"
                 android:label="Camera"
                 android:theme="@style/Theme.AppCompat" />
+            <activity
+                android:name="com.greatday.plugins.activity.location.LocationGreatdayActivity"
+                android:label="Location"
+                android:theme="@style/Theme.AppCompat" />
         </config-file>
         <!-- <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -45,6 +49,9 @@
         <source-file
             src="src/android/java/camera/CameraGreatdayActivity.java"
             target-dir="src/com/greatday/plugins/activity/camera" />
+        <source-file
+            src="src/android/java/location/LocationGreatdayActivity.java"
+            target-dir="src/com/greatday/plugins/activity/location" />
 
         <!-- Instalasi Gradle -->
         <framework
