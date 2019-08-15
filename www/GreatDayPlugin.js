@@ -5,7 +5,10 @@ var exec = require('cordova/exec');
 // };
 
 module.exports = {
-  getLocation: function(onSuccess, onError) {
-      exec(onSuccess, onError, 'GreatDayPlugin', 'getLocation', []);
+  getLocation: function (onSuccess, onError) {
+    exec(onSuccess, onError, 'GreatDayPlugin', 'getLocation', []);
+  },
+  getCamera: function (arg0, onSuccess, onError) {
+    exec(onSuccess, onError, 'GreatDayPlugin', 'getCamera', [arg0]);
   }
 };
