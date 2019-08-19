@@ -43,13 +43,11 @@ public class GreatDayPlugin extends CordovaPlugin {
     private void getCamera(Context context, String photoName) {
         Intent intent = new Intent(context, com.greatday.plugins.activity.camera.CameraGreatdayActivity.class);
         intent.putExtra("name", photoName);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         cordova.startActivityForResult(this, intent, REQUEST_CAMERA);
     }
 
     private void getLocation(Context context) {
         Intent intent = new Intent(context, com.greatday.plugins.activity.location.LocationGreatdayActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         cordova.startActivityForResult(this, intent, REQUEST_LOCATION);
     }
 
@@ -64,7 +62,7 @@ public class GreatDayPlugin extends CordovaPlugin {
                 PluginResult result = new PluginResult(PluginResult.Status.OK, information);
                 this.context.sendPluginResult(result);
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                PluginResult result = new PluginResult(PluginResult.Status.ERROR, "canceled action, process this in javascript");
+                PluginResult result = new PluginResult(PluginResult.Status.ERROR, "cancelled");
                 this.context.sendPluginResult(result);
             }
         } else if(requestCode == REQUEST_LOCATION) {
