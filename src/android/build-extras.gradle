@@ -3,6 +3,6 @@ repositories{
 }
 
 dependencies {
-    implementation 'com.github.senjuid:AndroidCamera:9.3'
-    implementation 'com.github.senjuid:AndroidLocation:7.0'
+    implementation 'com.github.senjuid:AndroidCamera:9.8'
+    implementation 'com.github.senjuid:AndroidLocation:7.1'
 }
