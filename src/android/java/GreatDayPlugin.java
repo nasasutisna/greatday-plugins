@@ -57,7 +57,7 @@ public class GreatDayPlugin extends CordovaPlugin {
   }
 
   private void getCamera(Context context, String photoName) {
-    Intent intent = new Intent(context, com.greatday.plugins.activity.camera.CameraGreatdayActivity.class);
+    Intent intent = new Intent(context, com.senjuid.camera.CaptureActivity.class);
     intent.putExtra("name", photoName);
     cordova.startActivityForResult(this, intent, REQUEST_CAMERA);
   }
@@ -123,7 +123,7 @@ public class GreatDayPlugin extends CordovaPlugin {
           e.printStackTrace();
         }
 
-        Intent intent = new Intent(contextLocationCamera, com.greatday.plugins.activity.camera.CameraGreatdayActivity.class);
+        Intent intent = new Intent(contextLocationCamera, com.senjuid.camera.CaptureActivity.class);
         intent.putExtra("name", photoCamera);
         cordova.startActivityForResult(this, intent, REQUEST_TO_CAMERA);
 
