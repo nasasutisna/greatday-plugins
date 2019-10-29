@@ -73,6 +73,7 @@ public class GreatDayPlugin extends CordovaPlugin {
     intent.putExtra("disable_back", true);
     cordova.startActivityForResult(this, intent, REQUEST_CAMERA);
   }
+  
   private void getCameraSwap(Context context, String photoName) {
     Intent intent = new Intent(context, com.senjuid.camera.CaptureActivity.class);
     intent.putExtra("name", photoName);
