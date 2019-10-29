@@ -3,6 +3,7 @@ package com.greatday.plugins;
 import android.app.Activity;
 import android.os.Bundle;
 
+import android.util.Log;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 
@@ -13,6 +14,8 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
+
+import javax.xml.transform.Source;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -39,12 +42,20 @@ public class GreatDayPlugin extends CordovaPlugin {
         this.getCamera(context, photoName);
         return true;
       }
+      case "getCameraSwap": {
+        this.context = callbackContext;
+        Context context = this.cordova.getActivity().getApplicationContext();
+        String photoName = args.getString(0);
+        this.getCameraSwap(context, photoName);
+        return true;
+      }
       case "getLocation": {
         this.context = callbackContext;
         Context context = this.cordova.getActivity().getApplicationContext();
         this.getLocation(context);
         return true;
       }
+
       case "getLocationCamera": {
         this.context = callbackContext;
         contextLocationCamera = this.cordova.getActivity().getApplicationContext();
@@ -59,6 +70,13 @@ public class GreatDayPlugin extends CordovaPlugin {
   private void getCamera(Context context, String photoName) {
     Intent intent = new Intent(context, com.senjuid.camera.CaptureActivity.class);
     intent.putExtra("name", photoName);
+    intent.putExtra("disable_back", true);
+    cordova.startActivityForResult(this, intent, REQUEST_CAMERA);
+  }
+  private void getCameraSwap(Context context, String photoName) {
+    Intent intent = new Intent(context, com.senjuid.camera.CaptureActivity.class);
+    intent.putExtra("name", photoName);
+    intent.putExtra("disable_back", false);
     cordova.startActivityForResult(this, intent, REQUEST_CAMERA);
   }
 
@@ -106,13 +124,13 @@ public class GreatDayPlugin extends CordovaPlugin {
         PluginResult result = new PluginResult(PluginResult.Status.ERROR, "error location");
         this.context.sendPluginResult(result);
       }
-    } else if(requestCode == REQUEST_TO_LOCATION) {
+    } else if (requestCode == REQUEST_TO_LOCATION) {
       if (resultCode == Activity.RESULT_OK) {
         Bundle extras = data.getExtras(); // Get data sent by the Intent
         assert extras != null;
-        String latitude = extras.getString("latitude" );
-        String longitude = extras.getString("longitude" );
-        String address = extras.getString("address" );
+        String latitude = extras.getString("latitude");
+        String longitude = extras.getString("longitude");
+        String address = extras.getString("address");
 
         jsonLocation = new JSONObject();
         try {
@@ -131,7 +149,7 @@ public class GreatDayPlugin extends CordovaPlugin {
         PluginResult result = new PluginResult(PluginResult.Status.ERROR, "error location");
         this.context.sendPluginResult(result);
       }
-    } else if(requestCode == REQUEST_TO_CAMERA) {
+    } else if (requestCode == REQUEST_TO_CAMERA) {
       if (resultCode == Activity.RESULT_OK) {
         Bundle extras = data.getExtras(); // Get data sent by the Intent
         assert extras != null;
