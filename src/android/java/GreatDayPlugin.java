@@ -46,8 +46,8 @@ public class GreatDayPlugin extends CordovaPlugin {
       case "getCameraSwap": {
         this.context = callbackContext;
         Context context = this.cordova.getActivity().getApplicationContext();
-        JSONArray photoName = args.getJSONArray(0);
-        this.getCameraSwap(context, photoName.toString());
+        String photoName = args.getString(0);
+        this.getCameraSwap(context, photoName);
         return true;
       }
       case "getLocation": {
