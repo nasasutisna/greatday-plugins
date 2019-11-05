@@ -85,7 +85,7 @@ public class GreatDayPlugin extends CordovaPlugin {
         JSONObject data = args.getJSONObject(0);
         photoCamera = data.getString("photo");
         isDisabled = true;
-        String location = data.getBoolean("location");
+        String location = data.getString("location");
         this.getLocationRadiusCamera(contextGlobal, location);
         return true;
       }
@@ -95,7 +95,7 @@ public class GreatDayPlugin extends CordovaPlugin {
         JSONObject data = args.getJSONObject(0);
         photoCamera = data.getString("photo");
         isDisabled = false;
-        String location = data.getBoolean("location");
+        String location = data.getString("location");
         this.getLocationRadiusCameraSwap(contextGlobal, location);
         return true;
       }
@@ -134,12 +134,22 @@ public class GreatDayPlugin extends CordovaPlugin {
     cordova.startActivityForResult(this, intent, REQUEST_TO_LOCATION);
   }
 
-  //  location radius Camera
-  private void getLocationRadiusCamera(Context context, Double work_lat, Double work_lon, Integer work_radius) {
+  private void getLocationCameraSwap(Context context) {
     Intent intent = new Intent(context, com.greatday.plugins.activity.location.LocationGreatdayActivity.class);
-    intent.putExtra("work_lat", work_lat);
-    intent.putExtra("work_lon", work_lon);
-    intent.putExtra("work_radius", work_radius);
+    cordova.startActivityForResult(this, intent, REQUEST_TO_LOCATION);
+  }
+
+  //  location radius Camera
+  private void getLocationRadiusCamera(Context context, String data) {
+    Intent intent = new Intent(context, com.greatday.plugins.activity.location.LocationGreatdayActivity.class);
+    intent.putExtra("data", data);
+    cordova.startActivityForResult(this, intent, REQUEST_TO_LOCATION);
+  }
+
+  //  location radius Camera Swap
+  private void getLocationRadiusCameraSwap(Context context, String data) {
+    Intent intent = new Intent(context, com.greatday.plugins.activity.location.LocationGreatdayActivity.class);
+    intent.putExtra("data", data);
     cordova.startActivityForResult(this, intent, REQUEST_TO_LOCATION);
   }
 
@@ -194,7 +204,7 @@ public class GreatDayPlugin extends CordovaPlugin {
           e.printStackTrace();
         }
 
-        Intent intent = new Intent(contextLocationCamera, com.senjuid.camera.CaptureActivity.class);
+        Intent intent = new Intent(contextGlobal, com.senjuid.camera.CaptureActivity.class);
         intent.putExtra("name", photoCamera);
         intent.putExtra("disable_back", isDisabled);
         cordova.startActivityForResult(this, intent, REQUEST_TO_CAMERA);
