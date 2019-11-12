@@ -111,7 +111,7 @@ public class GreatDayPlugin extends CordovaPlugin {
       }
       case "getLocationLabelLanguageRadius": {
         this.context = callbackContext;
-        contextGlobal = this.cordova.getActivity().getApplicationContext();
+        Context context = this.cordova.getActivity().getApplicationContext();
         JSONObject data = args.getJSONObject(0);
         String label1 = data.getString("label1");
         String label2 = data.getString("label2");
@@ -177,7 +177,7 @@ public class GreatDayPlugin extends CordovaPlugin {
   // get location with label and language
   private void getLocationLabelLanguage(Context context, String label1, String label2, String language) {
     if(language != null) {
-      com.greatday.plugins.activity.location.util.LocaleHelper.setLocale(context, language);
+      com.senjuid.location.util.LocaleHelper.setLocale(context, language);
     }
     Intent intent = new Intent(context, com.greatday.plugins.activity.location.LocationGreatdayActivity.class);
     intent.putExtra("message1", label1);
@@ -188,7 +188,7 @@ public class GreatDayPlugin extends CordovaPlugin {
   // get location with radius, label and language
   private void getLocationLabelLanguageRadius(Context context, String label1, String label2, String language, String data) {
     if(language != null) {
-      com.greatday.plugins.activity.location.util.LocaleHelper.setLocale(context, language);
+      com.senjuid.location.util.LocaleHelper.setLocale(context, language);
     }
     Intent intent = new Intent(context, com.greatday.plugins.activity.location.LocationGreatdayActivity.class);
     intent.putExtra("message1", label1);
