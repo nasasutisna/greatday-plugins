@@ -58,7 +58,7 @@ module.exports = {
   * location: String "{data:[{work_lat: -6.202394, work_lon: 106.652710, work_radius: 1000 },{work_lat: -6.175110, work_lon: 106.865036, work_radius: 1000 }]}"
   */
   getLocationRadiusCamera: function (photo, location, onSuccess, onError) {
-    let data = [];
+    var data = [];
     data.push({
       photo: photo,
       location: location
@@ -72,7 +72,7 @@ module.exports = {
   * location: String "{data:[{work_lat: -6.202394, work_lon: 106.652710, work_radius: 1000 },{work_lat: -6.175110, work_lon: 106.865036, work_radius: 1000 }]}"
   */
   getLocationRadiusCameraSwap: function (photo, location, onSuccess, onError) {
-    let data = [];
+    var data = [];
     data.push({
       photo: photo,
       location: location
@@ -92,7 +92,7 @@ module.exports = {
    *  china = zh
    */
   getLocationLabelLanguage: function (label1, label2, language, onSuccess, onError) {
-    let data = [];
+    var data = [];
     data.push({
       label1: label1,
       label2: label2,
@@ -114,7 +114,7 @@ module.exports = {
    * location: String "{data:[{work_lat: -6.202394, work_lon: 106.652710, work_radius: 1000 },{work_lat: -6.175110, work_lon: 106.865036, work_radius: 1000 }]}"
    */
   getLocationLabelLanguageRadius: function (label1, label2, language, location, onSuccess, onError) {
-    let data = [];
+    var data = [];
     data.push({
       label1: label1,
       label2: label2,
