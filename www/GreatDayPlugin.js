@@ -6,19 +6,39 @@ var exec = require('cordova/exec');
 
 module.exports = {
   /**
-   * Just get camera
-   * arg0 = String (name photo)
+   * Get Camera
+   * @param {*} photoName 
+   * @param {*} quality 
+   * @param {*} maxSize 
+   * @param {*} onSuccess 
+   * @param {*} onError 
    */
-  getCamera: function (arg0, onSuccess, onError) {
-    exec(onSuccess, onError, 'GreatDayPlugin', 'getCamera', [arg0]);
+  getCamera: function (photoName, quality, maxSize, onSuccess, onError) {
+    var data = [];
+    data.push({
+      photoName: photoName,
+      quality: quality,
+      max_size: maxSize
+    });
+    exec(onSuccess, onError, 'GreatDayPlugin', 'getCamera', data);
   },
 
   /**
-   * Get camera with swap on or off
-   * arg0 = String (name photo)
+   *  Get camera with swap on or off
+   * @param {*} photoName 
+   * @param {*} quality 
+   * @param {*} maxSize 
+   * @param {*} onSuccess 
+   * @param {*} onError 
    */
-  getCameraSwap: function (arg0, onSuccess, onError) {
-    exec(onSuccess, onError, 'GreatDayPlugin', 'getCameraSwap', [arg0]);
+  getCameraSwap: function (photoName, quality, maxSize, onSuccess, onError) {
+    var data = [];
+    data.push({
+      photoName: photoName,
+      quality: quality,
+      max_size: maxSize
+    });
+    exec(onSuccess, onError, 'GreatDayPlugin', 'getCameraSwap', data);
   },
 
   /**
@@ -38,44 +58,82 @@ module.exports = {
 
   /**
    * get location and camera
-   * arg0 = String (name photo)
+   * @param {*} photoName 
+   * @param {*} quality 
+   * @param {*} maxSize 
+   * @param {*} onSuccess 
+   * @param {*} onError 
    */
-  getLocationCamera: function (arg0, onSuccess, onError) {
-    exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationCamera', [arg0]);
+  getLocationCamera: function (photoName, quality, maxSize, onSuccess, onError) {
+    var data = [];
+    data.push({
+      photoName: photoName,
+      quality: quality,
+      max_size: maxSize
+    });
+    exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationCamera', data);
   },
 
   /**
    * get Location and camera swap on/off
-   * arg0 = String (name photo)
+   * @param {*} photoName 
+   * @param {*} quality 
+   * @param {*} maxSize 
+   * @param {*} onSuccess 
+   * @param {*} onError 
    */
-  getLocationCameraSwap: function (arg0, onSuccess, onError) {
-    exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationCameraSwap', [arg0]);
+  getLocationCameraSwap: function (photoName, quality, maxSize, onSuccess, onError) {
+    var data = [];
+    data.push({
+      photoName: photoName,
+      quality: quality,
+      max_size: maxSize
+    });
+
+    exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationCameraSwap', data);
   },
 
-  /*
-  * get Location with radius and camera
-  * photo: String (name photo)
-  * location: String "{data:[{work_lat: -6.202394, work_lon: 106.652710, work_radius: 1000 },{work_lat: -6.175110, work_lon: 106.865036, work_radius: 1000 }]}"
-  */
-  getLocationRadiusCamera: function (photo, location, onSuccess, onError) {
-    let data = [];
+  /**
+   * get Location with radius and camera
+   * photo: String (name photo)
+   * location: String "{data:[{work_lat: -6.202394, work_lon: 106.652710, work_radius: 1000 },{work_lat: -6.175110, work_lon: 106.865036, work_radius: 1000 }]}"
+   * @param {*} photoName 
+   * @param {*} quality 
+   * @param {*} maxSize 
+   * @param {*} location 
+   * @param {*} onSuccess 
+   * @param {*} onError 
+   */
+  getLocationRadiusCamera: function (photoName, quality, maxSize, location, onSuccess, onError) {
+    var data = [];
     data.push({
-      photo: photo,
-      location: location
-    })
+      photoName: photoName,
+      location: location,
+      quality: quality,
+      max_size: maxSize
+    });
+
     exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationRadiusCamera', data);
   },
 
-  /*
-  * get Location with radius and camera swap on/off
-  * photo: String (name photo)
-  * location: String "{data:[{work_lat: -6.202394, work_lon: 106.652710, work_radius: 1000 },{work_lat: -6.175110, work_lon: 106.865036, work_radius: 1000 }]}"
-  */
-  getLocationRadiusCameraSwap: function (photo, location, onSuccess, onError) {
-    let data = [];
+  /**
+   * get Location with radius and camera swap on/off    
+   * photo: String (name photo)
+   * location: String "{data:[{work_lat: -6.202394, work_lon: 106.652710, work_radius: 1000 },{work_lat: -6.175110, work_lon: 106.865036, work_radius: 1000 }]}" 
+   * @param {*} photoName 
+   * @param {*} quality 
+   * @param {*} maxSize 
+   * @param {*} location 
+   * @param {*} onSuccess 
+   * @param {*} onError 
+   */
+  getLocationRadiusCameraSwap: function (photoName, quality, maxSize, location, onSuccess, onError) {
+    var data = [];
     data.push({
-      photo: photo,
-      location: location
+      photoName: photoName,
+      location: location,
+      quality: quality,
+      max_size: maxSize
     })
     exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationRadiusCameraSwap', data);
   },
@@ -92,14 +150,14 @@ module.exports = {
    *  china = zh
    */
   getLocationLabelLanguage: function (label1, label2, language, onSuccess, onError) {
-    let data = [];
+    var data = [];
     data.push({
       label1: label1,
       label2: label2,
       language: language
     })
     exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationLabelLanguage', data);
-  }, 
+  },
 
   /**
    * Get Location with label and language
@@ -114,7 +172,7 @@ module.exports = {
    * location: String "{data:[{work_lat: -6.202394, work_lon: 106.652710, work_radius: 1000 },{work_lat: -6.175110, work_lon: 106.865036, work_radius: 1000 }]}"
    */
   getLocationLabelLanguageRadius: function (label1, label2, language, location, onSuccess, onError) {
-    let data = [];
+    var data = [];
     data.push({
       label1: label1,
       label2: label2,
@@ -123,5 +181,4 @@ module.exports = {
     })
     exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationLabelLanguageRadius', data);
   }
-
 };
