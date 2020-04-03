@@ -211,6 +211,7 @@ public class GreatDayPlugin extends CordovaPlugin {
                     PluginResult result = new PluginResult(PluginResult.Status.ERROR, "cancelled");
                     this.context.sendPluginResult(result);
                 } catch (JSONException e) {
+                    e.printStackTrace();
                     PluginResult result = new PluginResult(PluginResult.Status.ERROR, "cancelled");
                     this.context.sendPluginResult(result);
                 }
