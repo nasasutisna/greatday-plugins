@@ -200,6 +200,7 @@ public class GreatDayPlugin extends CordovaPlugin {
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == REQUEST_CAMERA) {
+          try {
             if (resultCode == Activity.RESULT_OK) {
                 Bundle extras = data.getExtras(); // Get data sent by the Intent
                 assert extras != null;
@@ -207,18 +208,16 @@ public class GreatDayPlugin extends CordovaPlugin {
                 PluginResult result = new PluginResult(PluginResult.Status.OK, information);
                 this.context.sendPluginResult(result);
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                try {
-                    PluginResult result = new PluginResult(PluginResult.Status.ERROR, "cancelled");
-                    this.context.sendPluginResult(result);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    PluginResult result = new PluginResult(PluginResult.Status.ERROR, "cancelled");
-                    this.context.sendPluginResult(result);
-                }
+                PluginResult result = new PluginResult(PluginResult.Status.ERROR, "cancelled");
+                this.context.sendPluginResult(result);
             } else {
                 PluginResult result = new PluginResult(PluginResult.Status.ERROR, "cancelled");
                 this.context.sendPluginResult(result);
             }
+          } catch (Exception e) {
+            PluginResult result = new PluginResult(PluginResult.Status.ERROR, "cancelled");
+            this.context.sendPluginResult(result);
+          }
         } else if (requestCode == REQUEST_LOCATION) {
             if (resultCode == Activity.RESULT_OK) {
                 Bundle extras = data.getExtras(); // Get data sent by the Intent
