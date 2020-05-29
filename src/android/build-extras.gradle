@@ -3,6 +3,6 @@ repositories{
 }
 
 dependencies {
-    implementation 'com.github.hendi-evolution:AndroidCamera:master-SNAPSHOT'
+    implementation 'com.github.hendi-evolution:AndroidCamera:2.1.3'
     implementation 'com.github.senjuid:AndroidLocation:8.2'
 }
