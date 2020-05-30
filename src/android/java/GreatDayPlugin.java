@@ -6,6 +6,7 @@ import com.senjuid.camera.CameraPlugin;
 import com.senjuid.camera.CameraPluginListener;
 import com.senjuid.camera.CameraPluginOptions;
 import com.senjuid.location.LocationPlugin;
+import com.senjuid.location.LocationPluginOptions;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -73,24 +74,21 @@ public class GreatDayPlugin extends CordovaPlugin {
         return true;
       }
       case "getLocationLabelLanguage": {
-//        this.context = callbackContext;
-//        Context context = this.cordova.getActivity().getApplicationContext();
-//        JSONObject data = args.getJSONObject(0);
-//        String label1 = data.getString("label1");
-//        String label2 = data.getString("label2");
-//        String language = data.getString("language");
-//        this.getLocationLabelLanguage(context, label1, label2, language);
+        JSONObject data = args.getJSONObject(0);
+        String label1 = data.getString("label1");
+        String label2 = data.getString("label2");
+        String language = data.getString("language");
+        this.getLocationWithLanguage(null, label1, label2, language);
         return true;
       }
       case "getLocationLabelLanguageRadius": {
         this.context = callbackContext;
-//        Context context = this.cordova.getActivity().getApplicationContext();
-//        JSONObject data = args.getJSONObject(0);
-//        String label1 = data.getString("label1");
-//        String label2 = data.getString("label2");
-//        String language = data.getString("language");
-//        String location = data.getString("location");
-//        this.getLocationLabelLanguageRadius(context, label1, label2, language, location);
+        JSONObject data = args.getJSONObject(0);
+        String label1 = data.getString("label1");
+        String label2 = data.getString("label2");
+        String language = data.getString("language");
+        String location = data.getString("location");
+        this.getLocationWithLanguage(location, label1, label2, language);
         return true;
       }
     }
@@ -148,7 +146,11 @@ public class GreatDayPlugin extends CordovaPlugin {
 
     locationPlugin = new LocationPlugin(this.cordova.getActivity());
     locationPlugin.setLocationPluginListener(locationPluginListener);
-    this.cordova.startActivityForResult(this, locationPlugin.getIntent(location), LocationPlugin.REQUEST);
+    LocationPluginOptions options = new LocationPluginOptions.Builder()
+      .setData(location)
+      .build();
+    Intent intent = locationPlugin.getIntent(options);
+    this.cordova.startActivityForResult(this, intent, LocationPlugin.REQUEST);
   }
 
   private void getLocationAndTakePhoto(String photoCamera, String location, boolean disableBackCamera) throws JSONException {
@@ -204,31 +206,49 @@ public class GreatDayPlugin extends CordovaPlugin {
 
     locationPlugin = new LocationPlugin(this.cordova.getActivity());
     locationPlugin.setLocationPluginListener(locationPluginListener);
-    this.cordova.startActivityForResult(this, locationPlugin.getIntent(location), LocationPlugin.REQUEST);
+    LocationPluginOptions options = new LocationPluginOptions.Builder()
+      .setData(location)
+      .build();
+    Intent intent = locationPlugin.getIntent(options);
+    this.cordova.startActivityForResult(this, intent, LocationPlugin.REQUEST);
   }
 
-  // get location with label and language
-  /*private void getLocationLabelLanguage(Context context, String label1, String label2, String language) {
+  private void getLocationWithLanguage(String location, String message1, String message2, String language) throws JSONException {
     if (language != null) {
-      com.senjuid.location.util.LocaleHelper.setLocale(context, language);
+      com.senjuid.location.util.LocaleHelper.setLocale(this.cordova.getContext(), language);
     }
-    Intent intent = new Intent(context, com.greatday.plugins.activity.location.LocationGreatdayActivity.class);
-    intent.putExtra("message1", label1);
-    intent.putExtra("message2", label2);
-    cordova.startActivityForResult(this, intent, REQUEST_LOCATION);
-  }*/
 
-  // get location with radius, label and language
-  /*private void getLocationLabelLanguageRadius(Context context, String label1, String label2, String language, String data) {
-    if (language != null) {
-      com.senjuid.location.util.LocaleHelper.setLocale(context, language);
-    }
-    Intent intent = new Intent(context, com.greatday.plugins.activity.location.LocationGreatdayActivity.class);
-    intent.putExtra("message1", label1);
-    intent.putExtra("message2", label2);
-    intent.putExtra("data", data);
-    cordova.startActivityForResult(this, intent, REQUEST_LOCATION);
-  }*/
+    LocationPlugin.LocationPluginListener locationPluginListener = new LocationPlugin.LocationPluginListener() {
+      @Override
+      public void onLocationRetrieved(Double lon, Double lat) {
+        JSONObject jsonLocation = new JSONObject();
+        try {
+          jsonLocation.put("latitude", String.valueOf(lat));
+          jsonLocation.put("longitude", String.valueOf(lon));
+          jsonLocation.put("address", "");
+        } catch (JSONException e) {
+          e.printStackTrace();
+        }
+        PluginResult result = new PluginResult(PluginResult.Status.OK, jsonLocation);
+        GreatDayPlugin.this.context.sendPluginResult(result);
+      }
+
+      @Override
+      public void onCanceled() {
+        PluginResult result = new PluginResult(PluginResult.Status.ERROR, "error location");
+        GreatDayPlugin.this.context.sendPluginResult(result);
+      }
+    };
+
+    locationPlugin = new LocationPlugin(this.cordova.getActivity());
+    locationPlugin.setLocationPluginListener(locationPluginListener);
+    LocationPluginOptions options = new LocationPluginOptions.Builder()
+      .setData(location)
+      .setMessage(message1, message2)
+      .build();
+    Intent intent = locationPlugin.getIntent(options);
+    this.cordova.startActivityForResult(this, intent, LocationPlugin.REQUEST);
+  }
 
   @Override
   public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
