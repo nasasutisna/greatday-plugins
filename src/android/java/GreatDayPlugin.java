@@ -31,13 +31,33 @@ public class GreatDayPlugin extends CordovaPlugin {
 
     switch (action) {
       case "getCamera": {
-        String photoName = args.getString(0);
-        this.takePhoto(photoName, true);
+        JSONObject data = args.getJSONObject(0);
+        String photoName = data.getString("photoName");
+        int quality = parseQuality(data.getString("quality"));
+        int maxSize = parseMaxSize(data.getString("max_size"));
+
+        CameraPluginOptions options = new CameraPluginOptions.Builder()
+          .setName(photoName)
+          .setDisableFacingBack(true)
+          .setMaxSize(maxSize)
+          .setQuality(quality)
+          .build();
+        this.takePhoto(options);
         return true;
       }
-      case "getCameraSwap": {
-        String photoName = args.getString(0);
-        this.takePhoto(photoName, false);
+      case "getCameraSwap": { // ini dipanggil, di panggil di semua fitur
+        JSONObject data = args.getJSONObject(0);
+        String photoName = data.getString("photoName");
+        int quality = parseQuality(data.getString("quality"));
+        int maxSize = parseMaxSize(data.getString("max_size"));
+
+        CameraPluginOptions options = new CameraPluginOptions.Builder()
+          .setName(photoName)
+          .setDisableFacingBack(false)
+          .setMaxSize(maxSize)
+          .setQuality(quality)
+          .build();
+        this.takePhoto(options);
         return true;
       }
       case "getLocation": {
@@ -49,28 +69,66 @@ public class GreatDayPlugin extends CordovaPlugin {
         this.getLocation(workLocationData);
         return true;
       }
-      case "getLocationCamera": {
-        String photoCamera = args.getString(0);
-        this.getLocationAndTakePhoto(photoCamera, null, true);
+      case "getLocationCamera": { // ini dipanggil, attendance
+        JSONObject data = args.getJSONObject(0);
+        String photoName = data.getString("photoName");
+        int quality = parseQuality(data.getString("quality"));
+        int maxSize = parseMaxSize(data.getString("max_size"));
+
+        CameraPluginOptions options = new CameraPluginOptions.Builder()
+          .setName(photoName)
+          .setDisableFacingBack(true)
+          .setMaxSize(maxSize)
+          .setQuality(quality)
+          .build();
+        this.getLocationAndTakePhoto(options, null);
         return true;
       }
-      case "getLocationCameraSwap": {
-        String photoCamera = args.getString(0);
-        this.getLocationAndTakePhoto(photoCamera, null, false);
+      case "getLocationCameraSwap": { // ini dipanggil, act recording
+        JSONObject data = args.getJSONObject(0);
+        String photoName = data.getString("photoName");
+        int quality = parseQuality(data.getString("quality"));
+        int maxSize = parseMaxSize(data.getString("max_size"));
+
+        CameraPluginOptions options = new CameraPluginOptions.Builder()
+          .setName(photoName)
+          .setDisableFacingBack(false)
+          .setMaxSize(maxSize)
+          .setQuality(quality)
+          .build();
+        this.getLocationAndTakePhoto(options, null);
         return true;
       }
       case "getLocationRadiusCamera": {
         JSONObject data = args.getJSONObject(0);
-        String photoCamera = data.getString("photo");
+        String photoName = data.getString("photoName");
+        int quality = parseQuality(data.getString("quality"));
+        int maxSize = parseMaxSize(data.getString("max_size"));
         String location = data.getString("location");
-        this.getLocationAndTakePhoto(photoCamera, location, true);
+
+        CameraPluginOptions options = new CameraPluginOptions.Builder()
+          .setName(photoName)
+          .setDisableFacingBack(true)
+          .setMaxSize(maxSize)
+          .setQuality(quality)
+          .build();
+        this.getLocationAndTakePhoto(options, location);
         return true;
       }
       case "getLocationRadiusCameraSwap": {
         JSONObject data = args.getJSONObject(0);
-        String photoCamera = data.getString("photo");
+        String photoName = data.getString("photoName");
+        int quality = parseQuality(data.getString("quality"));
+        int maxSize = parseMaxSize(data.getString("max_size"));
         String location = data.getString("location");
-        this.getLocationAndTakePhoto(photoCamera, location, false);
+
+        CameraPluginOptions options = new CameraPluginOptions.Builder()
+          .setName(photoName)
+          .setDisableFacingBack(false)
+          .setMaxSize(maxSize)
+          .setQuality(quality)
+          .build();
+        this.getLocationAndTakePhoto(options, location);
         return true;
       }
       case "getLocationLabelLanguage": {
@@ -95,8 +153,9 @@ public class GreatDayPlugin extends CordovaPlugin {
     return false;
   }
 
-  private void takePhoto(String photoName, boolean disableBackCamera) {
-    CameraPluginListener cameraPluginListener = new CameraPluginListener() {
+  private void takePhoto(CameraPluginOptions options) {
+    cameraPlugin = new CameraPlugin(GreatDayPlugin.this.cordova.getActivity());
+    cameraPlugin.setCameraPluginListener(new CameraPluginListener() {
       @Override
       public void onSuccess(@NotNull String s) {
         PluginResult result = new PluginResult(PluginResult.Status.OK, s);
@@ -108,17 +167,9 @@ public class GreatDayPlugin extends CordovaPlugin {
         PluginResult result = new PluginResult(PluginResult.Status.ERROR, "cancelled");
         GreatDayPlugin.this.context.sendPluginResult(result);
       }
-    };
-    cameraPlugin = new CameraPlugin(GreatDayPlugin.this.cordova.getActivity());
-    cameraPlugin.setCameraPluginListener(cameraPluginListener);
+    });
 
-    CameraPluginOptions options = new CameraPluginOptions.Builder()
-      .setDisableFacingBack(disableBackCamera)
-      .setName(photoName)
-      .build();
-
-    GreatDayPlugin.this.cordova.startActivityForResult(GreatDayPlugin.this,
-      cameraPlugin.getIntent(options), CameraPlugin.REQUEST);
+    this.cordova.startActivityForResult(this, cameraPlugin.getIntent(options), CameraPlugin.REQUEST);
   }
 
   private void getLocation(String location) throws JSONException {
@@ -153,7 +204,7 @@ public class GreatDayPlugin extends CordovaPlugin {
     this.cordova.startActivityForResult(this, intent, LocationPlugin.REQUEST);
   }
 
-  private void getLocationAndTakePhoto(String photoCamera, String location, boolean disableBackCamera) throws JSONException {
+  private void getLocationAndTakePhoto(CameraPluginOptions cameraOption, String location) throws JSONException {
     JSONObject jsonLocation = new JSONObject();
     CameraPluginListener cameraPluginListener = new CameraPluginListener() {
       @Override
@@ -187,14 +238,8 @@ public class GreatDayPlugin extends CordovaPlugin {
 
         cameraPlugin = new CameraPlugin(GreatDayPlugin.this.cordova.getActivity());
         cameraPlugin.setCameraPluginListener(cameraPluginListener);
-
-        CameraPluginOptions options = new CameraPluginOptions.Builder()
-          .setDisableFacingBack(disableBackCamera)
-          .setName(photoCamera)
-          .build();
-
         GreatDayPlugin.this.cordova.startActivityForResult(GreatDayPlugin.this,
-          cameraPlugin.getIntent(options), CameraPlugin.REQUEST);
+          cameraPlugin.getIntent(cameraOption), CameraPlugin.REQUEST);
       }
 
       @Override
@@ -259,5 +304,19 @@ public class GreatDayPlugin extends CordovaPlugin {
       locationPlugin.onActivityResult(requestCode, resultCode, data);
     }
     super.onActivityResult(requestCode, resultCode, data);
+  }
+
+  private int parseQuality(String qualityStr) {
+    if (qualityStr != null && !qualityStr.isEmpty()) {
+      return Integer.parseInt(qualityStr);
+    }
+    return 100;
+  }
+
+  private int parseMaxSize(String maxSizeStr) {
+    if (maxSizeStr != null && !maxSizeStr.isEmpty()) {
+      return Integer.parseInt(maxSizeStr);
+    }
+    return 1024;
   }
 }
