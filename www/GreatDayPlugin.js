@@ -180,5 +180,17 @@ module.exports = {
       location: location
     })
     exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationLabelLanguageRadius', data);
+  },
+
+  /**
+   * Get video files that recorded by applicant
+   * questions: String "[{\"id\":1,\"q\":\"Question number 1\",\"video_path\":\"\"},{\"id\":2,\"q\":\"Question number 2\",\"video_path\":\"\"}]"
+   */
+  getRecruitmentData: function (questions, onSuccess, onError) {
+    var data = [];
+    data.push({
+      questions: questions,
+    })
+    exec(onSuccess, onError, 'GreatDayPlugin', 'getRecruitmentData', data);
   }
 };
