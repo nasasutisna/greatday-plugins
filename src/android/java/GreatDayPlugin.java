@@ -2,6 +2,8 @@ package com.greatday.plugins;
 
 import android.content.Intent;
 
+import com.greatdayhr.videorecruitment.VideoRecruitmentPlugin;
+import com.greatdayhr.videorecruitment.VideoRecruitmentPluginListener;
 import com.senjuid.camera.CameraPlugin;
 import com.senjuid.camera.CameraPluginListener;
 import com.senjuid.camera.CameraPluginOptions;
@@ -24,6 +26,7 @@ public class GreatDayPlugin extends CordovaPlugin {
   private CallbackContext context;
   private CameraPlugin cameraPlugin;
   private LocationPlugin locationPlugin;
+  private VideoRecruitmentPlugin videoRecruitmentPlugin;
 
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -147,6 +150,21 @@ public class GreatDayPlugin extends CordovaPlugin {
         String language = data.getString("language");
         String location = data.getString("location");
         this.getLocationWithLanguage(location, label1, label2, language);
+        return true;
+      }
+      case "getRecruitmentData": {
+        videoRecruitmentPlugin = new VideoRecruitmentPlugin(new VideoRecruitmentPluginListener() {
+          @Override
+          public void onComplete(@NotNull JSONArray jsonArray) {
+            PluginResult result = new PluginResult(PluginResult.Status.OK, jsonArray.toString());
+            GreatDayPlugin.this.context.sendPluginResult(result);
+          }
+        });
+
+        JSONObject data = args.getJSONObject(0);
+        String questions = data.getString("questions");
+        Intent i = videoRecruitmentPlugin.getIntent(this.cordova.getActivity(), questions);
+        this.cordova.startActivityForResult(this, i, VideoRecruitmentPlugin.REQUEST);
         return true;
       }
     }
@@ -302,6 +320,9 @@ public class GreatDayPlugin extends CordovaPlugin {
     }
     if (locationPlugin != null) {
       locationPlugin.onActivityResult(requestCode, resultCode, data);
+    }
+    if (videoRecruitmentPlugin != null) {
+      videoRecruitmentPlugin.onActivityResult(requestCode, resultCode, data);
     }
     super.onActivityResult(requestCode, resultCode, data);
   }
