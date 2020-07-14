@@ -1,7 +1,10 @@
 package com.greatday.plugins;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 
+import com.dataon.sunfishgoqa.BuildConfig;
 import com.greatdayhr.videorecruitment.VideoRecruitmentPlugin;
 import com.greatdayhr.videorecruitment.VideoRecruitmentPluginListener;
 import com.senjuid.camera.CameraPlugin;
@@ -167,6 +170,12 @@ public class GreatDayPlugin extends CordovaPlugin {
         this.cordova.startActivityForResult(this, i, VideoRecruitmentPlugin.REQUEST);
         return true;
       }
+      case "setWhiteLabel": {
+        JSONObject data = args.getJSONObject(0);
+        String name = data.getString("name");
+        setWhiteLabel(name);
+        return true;
+      }
     }
     return false;
   }
@@ -311,6 +320,20 @@ public class GreatDayPlugin extends CordovaPlugin {
       .build();
     Intent intent = locationPlugin.getIntent(options);
     this.cordova.startActivityForResult(this, intent, LocationPlugin.REQUEST);
+  }
+
+  private void setWhiteLabel(String name) {
+    this.cordova.getContext().getPackageManager()
+      .setComponentEnabledSetting(
+        new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + "." + name),
+        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+        PackageManager.DONT_KILL_APP);
+
+    this.cordova.getContext().getPackageManager()
+      .setComponentEnabledSetting(
+        new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".default"),
+        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+        PackageManager.DONT_KILL_APP);
   }
 
   @Override
