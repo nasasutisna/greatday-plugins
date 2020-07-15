@@ -184,7 +184,7 @@ module.exports = {
 
   /**
    * Get video files that recorded by applicant
-   * questions: String "[{\"id\":1,\"q\":\"Question number 1\",\"video_path\":\"\"},{\"id\":2,\"q\":\"Question number 2\",\"video_path\":\"\"}]"
+   * @name questions String "[{\"id\":1,\"q\":\"Question number 1\",\"video_path\":\"\"},{\"id\":2,\"q\":\"Question number 2\",\"video_path\":\"\"}]"
    */
   getRecruitmentData: function (questions, onSuccess, onError) {
     var data = [];
@@ -192,5 +192,17 @@ module.exports = {
       questions: questions,
     })
     exec(onSuccess, onError, 'GreatDayPlugin', 'getRecruitmentData', data);
+  },
+
+  /**
+   * Set white label. Change icon and application name
+   * @name String The name of activity alias android
+   */
+  setWhiteLabel: function (name, onSuccess, onError) {
+    var data = [];
+    data.push({
+      name: name,
+    })
+    exec(onSuccess, onError, 'GreatDayPlugin', 'setWhiteLabel', data);
   }
 };
