@@ -20,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -323,17 +325,21 @@ public class GreatDayPlugin extends CordovaPlugin {
   }
 
   private void setWhiteLabel(String name) {
-    this.cordova.getContext().getPackageManager()
-      .setComponentEnabledSetting(
-        new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + "." + name),
-        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-        PackageManager.DONT_KILL_APP);
-
-    this.cordova.getContext().getPackageManager()
-      .setComponentEnabledSetting(
-        new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".default"),
-        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-        PackageManager.DONT_KILL_APP);
+    try {
+      PackageManager pm = this.cordova.getContext().getPackageManager();
+      ActivityInfo ai = pm.getActivityInfo(this.cordova.getActivity().getIntent().getComponent(), PackageManager.GET_META_DATA);
+      if(ai.name.contains("default")){
+        pm.setComponentEnabledSetting(
+          new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + "." + name),
+          PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+          PackageManager.DONT_KILL_APP);
+      }else{
+        pm.setComponentEnabledSetting(
+          new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".default"),
+          PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+          PackageManager.DONT_KILL_APP);
+      }
+    }catch (Exception e){}
   }
 
   @Override
