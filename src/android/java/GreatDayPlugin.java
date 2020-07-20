@@ -1,7 +1,12 @@
 package com.greatday.plugins;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 
+import com.dataon.sunfishgoqa.BuildConfig;
+import com.greatdayhr.videorecruitment.VideoRecruitmentPlugin;
+import com.greatdayhr.videorecruitment.VideoRecruitmentPluginListener;
 import com.senjuid.camera.CameraPlugin;
 import com.senjuid.camera.CameraPluginListener;
 import com.senjuid.camera.CameraPluginOptions;
@@ -15,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -24,6 +31,7 @@ public class GreatDayPlugin extends CordovaPlugin {
   private CallbackContext context;
   private CameraPlugin cameraPlugin;
   private LocationPlugin locationPlugin;
+  private VideoRecruitmentPlugin videoRecruitmentPlugin;
 
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -147,6 +155,27 @@ public class GreatDayPlugin extends CordovaPlugin {
         String language = data.getString("language");
         String location = data.getString("location");
         this.getLocationWithLanguage(location, label1, label2, language);
+        return true;
+      }
+      case "getRecruitmentData": {
+        videoRecruitmentPlugin = new VideoRecruitmentPlugin(new VideoRecruitmentPluginListener() {
+          @Override
+          public void onComplete(@NotNull JSONArray jsonArray) {
+            PluginResult result = new PluginResult(PluginResult.Status.OK, jsonArray.toString());
+            GreatDayPlugin.this.context.sendPluginResult(result);
+          }
+        });
+
+        JSONObject data = args.getJSONObject(0);
+        String questions = data.getString("questions");
+        Intent i = videoRecruitmentPlugin.getIntent(this.cordova.getActivity(), questions);
+        this.cordova.startActivityForResult(this, i, VideoRecruitmentPlugin.REQUEST);
+        return true;
+      }
+      case "setWhiteLabel": {
+        JSONObject data = args.getJSONObject(0);
+        String name = data.getString("name");
+        setWhiteLabel(name);
         return true;
       }
     }
@@ -295,6 +324,24 @@ public class GreatDayPlugin extends CordovaPlugin {
     this.cordova.startActivityForResult(this, intent, LocationPlugin.REQUEST);
   }
 
+  private void setWhiteLabel(String name) {
+    try {
+      PackageManager pm = this.cordova.getContext().getPackageManager();
+      ActivityInfo ai = pm.getActivityInfo(this.cordova.getActivity().getIntent().getComponent(), PackageManager.GET_META_DATA);
+      if(ai.name.contains("default")){
+        pm.setComponentEnabledSetting(
+          new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + "." + name),
+          PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+          PackageManager.DONT_KILL_APP);
+      }else{
+        pm.setComponentEnabledSetting(
+          new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".default"),
+          PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+          PackageManager.DONT_KILL_APP);
+      }
+    }catch (Exception e){}
+  }
+
   @Override
   public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
     if (cameraPlugin != null) {
@@ -302,6 +349,9 @@ public class GreatDayPlugin extends CordovaPlugin {
     }
     if (locationPlugin != null) {
       locationPlugin.onActivityResult(requestCode, resultCode, data);
+    }
+    if (videoRecruitmentPlugin != null) {
+      videoRecruitmentPlugin.onActivityResult(requestCode, resultCode, data);
     }
     super.onActivityResult(requestCode, resultCode, data);
   }
