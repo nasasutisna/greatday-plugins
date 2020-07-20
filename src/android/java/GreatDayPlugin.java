@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
-import com.dataon.sunfishgoqa.BuildConfig;
 import com.greatdayhr.videorecruitment.VideoRecruitmentPlugin;
 import com.greatdayhr.videorecruitment.VideoRecruitmentPluginListener;
 import com.senjuid.camera.CameraPlugin;
@@ -175,7 +174,8 @@ public class GreatDayPlugin extends CordovaPlugin {
       case "setWhiteLabel": {
         JSONObject data = args.getJSONObject(0);
         String name = data.getString("name");
-        setWhiteLabel(name);
+        String packageId = data.getString("packageId");
+        setWhiteLabel(name, packageId);
         return true;
       }
     }
@@ -324,18 +324,18 @@ public class GreatDayPlugin extends CordovaPlugin {
     this.cordova.startActivityForResult(this, intent, LocationPlugin.REQUEST);
   }
 
-  private void setWhiteLabel(String name) {
+  private void setWhiteLabel(String name, String packageId) {
     try {
       PackageManager pm = this.cordova.getContext().getPackageManager();
       ActivityInfo ai = pm.getActivityInfo(this.cordova.getActivity().getIntent().getComponent(), PackageManager.GET_META_DATA);
       if(ai.name.contains("default")){
         pm.setComponentEnabledSetting(
-          new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + "." + name),
+          new ComponentName(packageId, packageId + "." + name),
           PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
           PackageManager.DONT_KILL_APP);
       }else{
         pm.setComponentEnabledSetting(
-          new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".default"),
+          new ComponentName(packageId, packageId + ".default"),
           PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
           PackageManager.DONT_KILL_APP);
       }

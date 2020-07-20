@@ -198,10 +198,11 @@ module.exports = {
    * Set white label. Change icon and application name
    * @name String The name of activity alias android
    */
-  setWhiteLabel: function (name, onSuccess, onError) {
+  setWhiteLabel: function (name, packageId, onSuccess, onError) {
     var data = [];
     data.push({
       name: name,
+      packageId: packageId,
     })
     exec(onSuccess, onError, 'GreatDayPlugin', 'setWhiteLabel', data);
   }
