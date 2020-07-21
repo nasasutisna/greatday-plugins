@@ -204,12 +204,14 @@ public class GreatDayPlugin extends CordovaPlugin {
   private void getLocation(String location) throws JSONException {
     LocationPlugin.LocationPluginListener locationPluginListener = new LocationPlugin.LocationPluginListener() {
       @Override
-      public void onLocationRetrieved(Double lon, Double lat) {
+      public void onLocationRetrieved(Double lon, Double lat, Boolean isMock) {
         JSONObject jsonLocation = new JSONObject();
         try {
+          String address = locationPlugin.getCompleteAddress(lon, lat);
           jsonLocation.put("latitude", String.valueOf(lat));
           jsonLocation.put("longitude", String.valueOf(lon));
-          jsonLocation.put("address", "");
+          jsonLocation.put("address", address);
+          jsonLocation.put("mock", isMock);
         } catch (JSONException e) {
           e.printStackTrace();
         }
@@ -256,11 +258,13 @@ public class GreatDayPlugin extends CordovaPlugin {
     };
     LocationPlugin.LocationPluginListener locationPluginListener = new LocationPlugin.LocationPluginListener() {
       @Override
-      public void onLocationRetrieved(Double lon, Double lat) {
+      public void onLocationRetrieved(Double lon, Double lat, Boolean isMock) {
         try {
+          String address = locationPlugin.getCompleteAddress(lon, lat);
           jsonLocation.put("latitude", String.valueOf(lat));
           jsonLocation.put("longitude", String.valueOf(lon));
-          jsonLocation.put("address", "");
+          jsonLocation.put("address", address);
+          jsonLocation.put("mock", isMock);
         } catch (JSONException e) {
           e.printStackTrace();
         }
@@ -294,12 +298,14 @@ public class GreatDayPlugin extends CordovaPlugin {
 
     LocationPlugin.LocationPluginListener locationPluginListener = new LocationPlugin.LocationPluginListener() {
       @Override
-      public void onLocationRetrieved(Double lon, Double lat) {
+      public void onLocationRetrieved(Double lon, Double lat, Boolean isMock) {
         JSONObject jsonLocation = new JSONObject();
         try {
+          String address = locationPlugin.getCompleteAddress(lon, lat);
           jsonLocation.put("latitude", String.valueOf(lat));
           jsonLocation.put("longitude", String.valueOf(lon));
-          jsonLocation.put("address", "");
+          jsonLocation.put("address", address);
+          jsonLocation.put("mock", isMock);
         } catch (JSONException e) {
           e.printStackTrace();
         }
