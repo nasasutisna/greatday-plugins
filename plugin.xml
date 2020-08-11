@@ -48,14 +48,6 @@
             src="src/android/java/GreatDayPlugin.java"
             target-dir="src/com/greatday/plugins" />
 
-        <!-- Instalasi Activity -->
-        <source-file
-            src="src/android/java/camera/CameraGreatdayActivity.java"
-            target-dir="src/com/greatday/plugins/activity/camera" />
-        <source-file
-            src="src/android/java/location/LocationGreatdayActivity.java"
-            target-dir="src/com/greatday/plugins/activity/location" />
-
         <!-- Instalasi Gradle -->
         <framework
             custom="true"
