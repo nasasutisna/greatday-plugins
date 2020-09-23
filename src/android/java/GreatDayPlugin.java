@@ -20,7 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -186,8 +185,15 @@ public class GreatDayPlugin extends CordovaPlugin {
     cameraPlugin = new CameraPlugin(GreatDayPlugin.this.cordova.getActivity());
     cameraPlugin.setCameraPluginListener(new CameraPluginListener() {
       @Override
-      public void onSuccess(@NotNull String s) {
-        PluginResult result = new PluginResult(PluginResult.Status.OK, s);
+      public void onSuccess(@NotNull String s, boolean b) {
+        JSONObject jsonLocation = new JSONObject();
+        try {
+          jsonLocation.put("path", s);
+          jsonLocation.put("native", b);
+        } catch (JSONException e) {
+          e.printStackTrace();
+        }
+        PluginResult result = new PluginResult(PluginResult.Status.OK, jsonLocation);
         GreatDayPlugin.this.context.sendPluginResult(result);
       }
 
@@ -239,9 +245,10 @@ public class GreatDayPlugin extends CordovaPlugin {
     JSONObject jsonLocation = new JSONObject();
     CameraPluginListener cameraPluginListener = new CameraPluginListener() {
       @Override
-      public void onSuccess(@NotNull String s) {
+      public void onSuccess(@NotNull String s, boolean b) {
         try {
           jsonLocation.put("path", s);
+          jsonLocation.put("native", b);
         } catch (JSONException e) {
           e.printStackTrace();
         }
