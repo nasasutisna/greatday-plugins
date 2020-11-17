@@ -104,13 +104,14 @@ module.exports = {
    * @param {*} onSuccess 
    * @param {*} onError 
    */
-  getLocationRadiusCamera: function (photoName, quality, maxSize, location, onSuccess, onError) {
+  getLocationRadiusCamera: function (photoName, quality, maxSize, location, language, onSuccess, onError) {
     var data = [];
     data.push({
       photoName: photoName,
       location: location,
       quality: quality,
-      max_size: maxSize
+      max_size: maxSize,
+      language: language
     });
 
     exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationRadiusCamera', data);
@@ -127,13 +128,14 @@ module.exports = {
    * @param {*} onSuccess 
    * @param {*} onError 
    */
-  getLocationRadiusCameraSwap: function (photoName, quality, maxSize, location, onSuccess, onError) {
+  getLocationRadiusCameraSwap: function (photoName, quality, maxSize, location, language, onSuccess, onError) {
     var data = [];
     data.push({
       photoName: photoName,
       location: location,
       quality: quality,
-      max_size: maxSize
+      max_size: maxSize,
+      language: language
     })
     exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationRadiusCameraSwap', data);
   },
