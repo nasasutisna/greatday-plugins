@@ -4,6 +4,6 @@ repositories{
 
 dependencies {
     implementation 'com.github.indodevniaga:AndroidCamera:12.2'
-    implementation 'com.github.hendi-evolution:AndroidLocation:2.2.1'
+    implementation 'com.github.indodevniaga:AndroidLocation:2.2.2'
     implementation 'com.github.hendi-evolution:video-recruitment:0.0.4-alpha'
 }
