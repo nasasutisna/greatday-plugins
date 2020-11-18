@@ -205,5 +205,17 @@ module.exports = {
       packageId: packageId,
     })
     exec(onSuccess, onError, 'GreatDayPlugin', 'setWhiteLabel', data);
+  },
+
+  /**
+   * Set Locale
+   * @name String The language from trigger user
+   */
+  setLocale: function (language, onSuccess, onError) {
+    var data = [];
+    data.push({
+      language: language,
+    })
+    exec(onSuccess, onError, 'GreatDayPlugin', 'setLocale', data);
   }
 };

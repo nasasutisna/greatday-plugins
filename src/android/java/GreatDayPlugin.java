@@ -1,8 +1,13 @@
 package com.greatday.plugins;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.os.Handler;
+import java.util.Locale;
 
 import com.greatdayhr.videorecruitment.VideoRecruitmentPlugin;
 import com.greatdayhr.videorecruitment.VideoRecruitmentPluginListener;
@@ -13,7 +18,9 @@ import com.senjuid.location.LocationPlugin;
 import com.senjuid.location.LocationPluginOptions;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -30,12 +37,44 @@ public class GreatDayPlugin extends CordovaPlugin {
   private CameraPlugin cameraPlugin;
   private LocationPlugin locationPlugin;
   private VideoRecruitmentPlugin videoRecruitmentPlugin;
+  private Context contextApplication;
+
+  @Override
+  public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
+    super.initialize(cordova, webView);
+    this.contextApplication = (Context) cordova.getActivity().getApplication();
+  }
 
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
     this.context = callbackContext;
 
     switch (action) {
+      case "setLocale": {
+        JSONObject data = args.getJSONObject(0);
+        Handler mainHandler = new Handler(contextApplication.getMainLooper());
+
+        final String lang = data.getString("language");
+        Runnable myRunnable = new Runnable() {
+          @Override
+          public void run() {
+            try {
+              @SuppressLint("PrivateApi") Class<?> activityManagerNative = Class.forName("android.app.ActivityManagerNative");
+              Object am=activityManagerNative.getMethod("getDefault").invoke(activityManagerNative);
+              Object config=am.getClass().getMethod("getConfiguration").invoke(am);
+              config.getClass().getDeclaredField("locale").set(config, new Locale(lang));
+              config.getClass().getDeclaredField("userSetLocale").setBoolean(config, true);
+
+              am.getClass().getMethod("updateConfiguration", Configuration.class).invoke(am,config);
+
+            } catch (Exception ignored) {
+
+            }
+          }
+        };
+        mainHandler.post(myRunnable);
+        return true;
+      }
       case "getCamera": {
         JSONObject data = args.getJSONObject(0);
         String photoName = data.getString("photoName");
