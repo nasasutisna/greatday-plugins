@@ -104,13 +104,15 @@ module.exports = {
    * @param {*} onSuccess 
    * @param {*} onError 
    */
-  getLocationRadiusCamera: function (photoName, quality, maxSize, location, onSuccess, onError) {
+  getLocationRadiusCamera: function (photoName, quality, maxSize, location, label1, label2, onSuccess, onError) {
     var data = [];
     data.push({
       photoName: photoName,
       location: location,
       quality: quality,
-      max_size: maxSize
+      max_size: maxSize,
+      label1: label1,
+      label2: label2,
     });
 
     exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationRadiusCamera', data);
@@ -127,13 +129,15 @@ module.exports = {
    * @param {*} onSuccess 
    * @param {*} onError 
    */
-  getLocationRadiusCameraSwap: function (photoName, quality, maxSize, location, onSuccess, onError) {
+  getLocationRadiusCameraSwap: function (photoName, quality, maxSize, location, label1, label2, onSuccess, onError) {
     var data = [];
     data.push({
       photoName: photoName,
       location: location,
       quality: quality,
-      max_size: maxSize
+      max_size: maxSize,
+      label1: label1,
+      label2: label2,
     })
     exec(onSuccess, onError, 'GreatDayPlugin', 'getLocationRadiusCameraSwap', data);
   },
@@ -205,17 +209,5 @@ module.exports = {
       packageId: packageId,
     })
     exec(onSuccess, onError, 'GreatDayPlugin', 'setWhiteLabel', data);
-  },
-
-  /**
-   * Set Locale
-   * @name String The language from trigger user
-   */
-  setLocale: function (language, onSuccess, onError) {
-    var data = [];
-    data.push({
-      language: language,
-    })
-    exec(onSuccess, onError, 'GreatDayPlugin', 'setLocale', data);
   }
 };
