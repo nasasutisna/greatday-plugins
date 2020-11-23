@@ -87,7 +87,7 @@ public class GreatDayPlugin extends CordovaPlugin {
           .setMaxSize(maxSize)
           .setQuality(quality)
           .build();
-        this.getLocationAndTakePhoto(options, null);
+        this.getLocationAndTakePhoto(options, null, null, null);
         return true;
       }
       case "getLocationCameraSwap": { // ini dipanggil, act recording
@@ -102,7 +102,7 @@ public class GreatDayPlugin extends CordovaPlugin {
           .setMaxSize(maxSize)
           .setQuality(quality)
           .build();
-        this.getLocationAndTakePhoto(options, null);
+        this.getLocationAndTakePhoto(options, null, null, null);
         return true;
       }
       case "getLocationRadiusCamera": {
